@@ -97,38 +97,45 @@ void setup() {
 }
 
 void ramp_up(int inner, int outer,int t, int steps){
+  float in_base_speed = 0.4 * inner;
+  float out_base_speed = 0.4 * outer;
   for (int i = 1;i <= steps; i++){
-    analogWrite(enable_left, outer/steps*i);
-    analogWrite(enable_right, inner/steps*i);
-    delay(t/steps);
+    analogWrite(enable_left,(outer-out_base_speed)/steps*i + out_base_speed);
+    analogWrite(enable_right, (inner-in_base_speed)/steps*i + in_base_speed);
   }
 }
 void ramp_down(int inner, int outer,int t, int steps){
+  float in_base_speed = 0.4 * inner;
+  float out_base_speed = 0.4 * outer;
   for (int i = steps;i >0; i--){
-    analogWrite(enable_left, outer/steps*i);
-    analogWrite(enable_right, inner/steps*i);
+    analogWrite(enable_left,(outer-out_base_speed)/steps*i + out_base_speed);
+    analogWrite(enable_right, (inner-in_base_speed)/steps*i + in_base_speed);
   }
 }
 
 void loop() {
-  // extend_arm();
-  // while (digitalRead(bottom_button) == HIGH){
-  //   delay(10);
-  // }
-  // stop_arm();
   delay(1000);
-  forward(255,0,500);
+  reverse(255,255,1500);
   delay(1000);
-  turn_left(55,255,1000);
+  extend_arm();
+  while (digitalRead(bottom_button) == HIGH){
+    delay(10);
+   }
+  stop_arm();
+  
   delay(1000);
-  reverse(255,0,500);
+  forward(0,255,5000);
+  delay(1000);
+  //turn_left(200,255,5000);
+  //delay(1000);
   // delay(1000);
-  // retract_arm();
-  // while (digitalRead(top_button) == LOW){
-  //   delay(10);
-  // }
-  // stop_arm();
+  retract_arm();
+  while (digitalRead(top_button) == LOW){
+     delay(10);
+  }
+  stop_arm();
   delay(1000);
-  turn_right(255,255,1000);
+  
+  //turn_right(255,255,2000);
   delay(1000);
 }
